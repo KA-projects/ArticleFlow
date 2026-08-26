@@ -1,0 +1,14 @@
+{
+    "name": "blog/blog",
+    "description": "Тестовый блог на чистом PHP + Smarty + MySQL",
+    "type": "project",
+    "require": {
+        "php": ">=8.1",
+        "smarty/smarty": "^4"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}

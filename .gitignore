@@ -1,0 +1,8 @@
+/vendor/
+/.env
+/db-data/
+/public/assets/css/
+.DS_Store
+*.log
+AGENTS.md
+.vscode
