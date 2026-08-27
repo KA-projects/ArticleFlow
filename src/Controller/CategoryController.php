@@ -2,18 +2,58 @@
 
 namespace App\Controller;
 
+use App\Repository\ArticleRepository;
+use App\Repository\CategoryRepository;
 use Smarty;
 
 class CategoryController
 {
-    public function __construct(private Smarty $smarty)
-    {
+    private const SORT_WHITELIST = ['views', 'date'];
+    private const PER_PAGE = 6;
+
+    public function __construct(
+        private Smarty $smarty,
+        private CategoryRepository $categories,
+        private ArticleRepository $articles,
+    ) {
     }
 
     public function index(string $slug): void
     {
-        $this->smarty->assign('pageTitle', 'Категория');
-        $this->smarty->assign('slug', $slug);
+        $category = $this->categories->findBySlug($slug);
+
+        if ($category === null) {
+            http_response_code(404);
+            $this->smarty->assign('pageTitle', 'Не найдено');
+            $this->smarty->display('404.tpl');
+            return;
+        }
+
+        $sort = $_GET['sort'] ?? 'date';
+        if (!in_array($sort, self::SORT_WHITELIST, true)) {
+            $sort = 'date';
+        }
+
+        $page = max(1, (int) ($_GET['page'] ?? 1));
+        $count = $this->articles->countByCategory((int) $category['id']);
+        $totalPages = max(1, (int) ceil($count / self::PER_PAGE));
+
+        if ($page > $totalPages) {
+            $page = $totalPages;
+        }
+
+        $offset = ($page - 1) * self::PER_PAGE;
+        $articles = $this->articles->findByCategory((int) $category['id'], $sort, self::PER_PAGE, $offset);
+
+        $baseUrl = '/category/' . $category['slug'];
+
+        $this->smarty->assign('pageTitle', $category['name']);
+        $this->smarty->assign('category', $category);
+        $this->smarty->assign('articles', $articles);
+        $this->smarty->assign('sort', $sort);
+        $this->smarty->assign('page', $page);
+        $this->smarty->assign('totalPages', $totalPages);
+        $this->smarty->assign('baseUrl', $baseUrl);
         $this->smarty->display('category.tpl');
     }
 }

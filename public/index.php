@@ -19,8 +19,11 @@ $smarty->setCompileDir('/tmp/smarty_compile');
 $smarty->setCacheDir('/tmp/smarty_cache');
 $smarty->setCaching(false);
 
-$homeController = new HomeController($smarty, new CategoryRepository(), new ArticleRepository());
-$categoryController = new CategoryController($smarty);
+$categoryRepository = new CategoryRepository();
+$articleRepository = new ArticleRepository();
+
+$homeController = new HomeController($smarty, $categoryRepository, $articleRepository);
+$categoryController = new CategoryController($smarty, $categoryRepository, $articleRepository);
 $articleController = new ArticleController($smarty);
 
 $router = new Router();
