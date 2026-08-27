@@ -195,6 +195,18 @@ try {
                 ':category_id' => $categoryId,
             ]);
 
+            if (mt_rand(1, 100) <= 50) {
+                $extraCount = min(mt_rand(1, 4), count($categoryIds) - 1);
+                $others = array_values(array_diff($categoryIds, [$categoryId]));
+                shuffle($others);
+                foreach (array_slice($others, 0, $extraCount) as $extraCategoryId) {
+                    $linkStmt->execute([
+                        ':article_id' => $articleId,
+                        ':category_id' => $extraCategoryId,
+                    ]);
+                }
+            }
+
             $totalArticles++;
         }
     }
