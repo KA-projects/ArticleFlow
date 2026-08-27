@@ -24,7 +24,7 @@ $articleRepository = new ArticleRepository();
 
 $homeController = new HomeController($smarty, $categoryRepository, $articleRepository);
 $categoryController = new CategoryController($smarty, $categoryRepository, $articleRepository);
-$articleController = new ArticleController($smarty);
+$articleController = new ArticleController($smarty, $articleRepository);
 
 $router = new Router();
 $router->get('/', fn () => $homeController->index());
