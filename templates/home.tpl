@@ -34,6 +34,8 @@
                 <a class="all-articles" href="/category/{$section.category.slug}">Все статьи</a>
             </section>
         {/foreach}
+
+        {include file='partials/pagination.tpl'}
     {else}
         <p>Статей пока нет</p>
     {/if}
