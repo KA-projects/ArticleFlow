@@ -36,15 +36,13 @@ class CategoryController
             $sort = 'date';
         }
 
-        $page = max(1, (int) ($_GET['page'] ?? 1));
+        $requestedPage = max(1, (int) ($_GET['page'] ?? 1));
         $count = $this->articles->countByCategory((int) $category['id']);
-        $totalPages = max(1, (int) ceil($count / self::PER_PAGE));
+        $pagination = $this->pagination->resolve($requestedPage, $count, self::PER_PAGE);
+        $page = $pagination['page'];
+        $totalPages = $pagination['totalPages'];
+        $offset = $pagination['offset'];
 
-        if ($page > $totalPages) {
-            $page = $totalPages;
-        }
-
-        $offset = ($page - 1) * self::PER_PAGE;
         $articles = $this->articles->findByCategory((int) $category['id'], $sort, self::PER_PAGE, $offset);
 
         $baseUrl = '/category/' . $category['slug'];

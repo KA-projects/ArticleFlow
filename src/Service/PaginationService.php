@@ -4,6 +4,22 @@ namespace App\Service;
 
 class PaginationService
 {
+    public function resolve(int $page, int $count, int $perPage): array
+    {
+        $totalPages = max(1, (int) ceil($count / $perPage));
+        $page = max(1, $page);
+
+        if ($page > $totalPages) {
+            $page = $totalPages;
+        }
+
+        return [
+            'page' => $page,
+            'totalPages' => $totalPages,
+            'offset' => ($page - 1) * $perPage,
+        ];
+    }
+
     public function pageWindow(int $page, int $totalPages): array
     {
         $pages = [];

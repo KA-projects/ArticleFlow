@@ -21,15 +21,13 @@ class HomeController
 
     public function index(): void
     {
-        $page = max(1, (int) ($_GET['page'] ?? 1));
+        $requestedPage = max(1, (int) ($_GET['page'] ?? 1));
         $count = $this->categories->countWithArticles();
-        $totalPages = max(1, (int) ceil($count / self::PER_PAGE));
+        $pagination = $this->pagination->resolve($requestedPage, $count, self::PER_PAGE);
+        $page = $pagination['page'];
+        $totalPages = $pagination['totalPages'];
+        $offset = $pagination['offset'];
 
-        if ($page > $totalPages) {
-            $page = $totalPages;
-        }
-
-        $offset = ($page - 1) * self::PER_PAGE;
         $sections = [];
         foreach ($this->categories->allWithArticles(self::PER_PAGE, $offset) as $category) {
             $sections[] = [
