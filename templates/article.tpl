@@ -11,8 +11,7 @@
             <time datetime="{$article.created_at}">{$article.created_at|date_format:'%d.%m.%Y'}</time>
             <span class="views">{$viewsLabel}</span>
             <span class="categories">
-                {foreach $article.categories as $cat name=catlist}
-                    {if not $smarty.foreach.catlist.first}, {/if}
+                {foreach $article.categories as $cat}
                     <a href="/category/{$cat.slug}">{$cat.name}</a>
                 {/foreach}
             </span>
