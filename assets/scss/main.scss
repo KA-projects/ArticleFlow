@@ -194,6 +194,7 @@ footer {
 
 .pagination {
     display: flex;
+    flex-wrap: wrap;
     gap: $spacing-sm;
     align-items: center;
     justify-content: center;

@@ -4,13 +4,15 @@
             <a href="{$baseUrl}?sort={$sort}&page={$page-1}">&laquo; Назад</a>
         {/if}
 
-        {for $i = 1 to $totalPages}
-            {if $i == $page}
-                <span class="current">{$i}</span>
+        {foreach $pages as $item}
+            {if isset($item.ellipsis)}
+                <span class="ellipsis">…</span>
+            {elseif $item.page == $page}
+                <span class="current">{$item.page}</span>
             {else}
-                <a href="{$baseUrl}?sort={$sort}&page={$i}">{$i}</a>
+                <a href="{$baseUrl}?sort={$sort}&page={$item.page}">{$item.page}</a>
             {/if}
-        {/for}
+        {/foreach}
 
         {if $page < $totalPages}
             <a href="{$baseUrl}?sort={$sort}&page={$page+1}">Вперёд &raquo;</a>
