@@ -8,6 +8,7 @@ use App\Controller\HomeController;
 use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
 use App\Router;
+use App\Service\PaginationService;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 
@@ -21,9 +22,10 @@ $smarty->setCaching(false);
 
 $categoryRepository = new CategoryRepository();
 $articleRepository = new ArticleRepository();
+$paginationService = new PaginationService();
 
-$homeController = new HomeController($smarty, $categoryRepository, $articleRepository);
-$categoryController = new CategoryController($smarty, $categoryRepository, $articleRepository);
+$homeController = new HomeController($smarty, $categoryRepository, $articleRepository, $paginationService);
+$categoryController = new CategoryController($smarty, $categoryRepository, $articleRepository, $paginationService);
 $articleController = new ArticleController($smarty, $articleRepository);
 
 $router = new Router();
