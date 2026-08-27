@@ -93,7 +93,7 @@ function randomWords(Generator $faker, array $pool, int $min, int $max): array
 function uniqueName(Generator $faker, array $pool, array &$used): string
 {
     for ($attempt = 0; $attempt < 20; $attempt++) {
-        $name = mb_convert_case(implode(' ', randomWords($faker, $pool, 1, 2)), MB_CASE_TITLE, 'UTF-8');
+        $name = mb_convert_case(implode(' ', randomWords($faker, $pool, 1, 1)), MB_CASE_TITLE, 'UTF-8');
         if (!isset($used[$name])) {
             $used[$name] = true;
             return $name;
@@ -111,7 +111,7 @@ for ($i = 0; $i < 3; $i++) {
 $wordPool = array_values(array_filter(array_unique(array_map(
     fn (string $word) => trim($word, ".,!?;:«»()\"'"),
     $wordPool
-)), fn (string $word) => $word !== ''));
+)), fn (string $word) => $word !== '' && mb_strlen($word) >= 5));
 
 $paragraphPool = [];
 for ($i = 0; $i < 40; $i++) {
