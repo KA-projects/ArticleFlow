@@ -4,12 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{$pageTitle|default:'Блог'}</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
     {block name=styles}{/block}
 </head>
 <body>
 <header>
     <nav>
-        <a href="/">Главная</a>
+        <a href="/" class="{if $activeNav|default:'' == 'home'}active{/if}">Главная</a>
     </nav>
 </header>
 <main>

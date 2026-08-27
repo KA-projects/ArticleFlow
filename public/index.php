@@ -5,6 +5,8 @@ declare(strict_types=1);
 use App\Controller\ArticleController;
 use App\Controller\CategoryController;
 use App\Controller\HomeController;
+use App\Repository\ArticleRepository;
+use App\Repository\CategoryRepository;
 use App\Router;
 
 require dirname(__DIR__) . '/vendor/autoload.php';
@@ -17,7 +19,7 @@ $smarty->setCompileDir('/tmp/smarty_compile');
 $smarty->setCacheDir('/tmp/smarty_cache');
 $smarty->setCaching(false);
 
-$homeController = new HomeController($smarty);
+$homeController = new HomeController($smarty, new CategoryRepository(), new ArticleRepository());
 $categoryController = new CategoryController($smarty);
 $articleController = new ArticleController($smarty);
 

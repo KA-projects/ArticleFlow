@@ -23,7 +23,7 @@ class CategoryRepository
     public function allWithArticles(): array
     {
         $stmt = Database::getConnection()->query(
-            'SELECT c.id, c.slug, c.name, COUNT(ac.article_id) AS articles_count
+            'SELECT c.id, c.slug, c.name, c.description, COUNT(ac.article_id) AS articles_count
              FROM categories c
              INNER JOIN article_category ac ON ac.category_id = c.id
              GROUP BY c.id
