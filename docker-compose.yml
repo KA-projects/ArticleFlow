@@ -25,6 +25,7 @@ services:
       DB_NAME: ${MYSQL_DATABASE:-blog}
       DB_USER: ${MYSQL_USER:-blog}
       DB_PASS: ${MYSQL_PASSWORD:-blog}
+      APP_DEBUG: ${APP_DEBUG:-false}
     depends_on:
       db:
         condition: service_healthy
