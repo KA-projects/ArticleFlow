@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Contracts\CategoryRepositoryInterface;
+use App\Dto\Category;
 use PDO;
 
 class CategoryRepository implements CategoryRepositoryInterface
@@ -11,7 +14,7 @@ class CategoryRepository implements CategoryRepositoryInterface
     {
     }
 
-    public function findBySlug(string $slug): ?array
+    public function findBySlug(string $slug): ?Category
     {
         $stmt = $this->pdo->prepare(
             'SELECT c.*, COUNT(ac.article_id) AS articles_count
@@ -22,7 +25,9 @@ class CategoryRepository implements CategoryRepositoryInterface
         );
         $stmt->execute([$slug]);
 
-        return $stmt->fetch() ?: null;
+        $row = $stmt->fetch();
+
+        return $row === false ? null : Category::fromArray($row);
     }
 
     public function allWithArticles(int $limit, int $offset): array
@@ -39,7 +44,7 @@ class CategoryRepository implements CategoryRepositoryInterface
         $stmt->bindValue(2, $offset, PDO::PARAM_INT);
         $stmt->execute();
 
-        return $stmt->fetchAll();
+        return Category::fromRows($stmt->fetchAll());
     }
 
     public function countWithArticles(): int
@@ -57,11 +62,13 @@ class CategoryRepository implements CategoryRepositoryInterface
         return (int) $stmt->fetchColumn();
     }
 
-    public function findById(int $id): ?array
+    public function findById(int $id): ?Category
     {
         $stmt = $this->pdo->prepare('SELECT * FROM categories WHERE id = ?');
         $stmt->execute([$id]);
 
-        return $stmt->fetch() ?: null;
+        $row = $stmt->fetch();
+
+        return $row === false ? null : Category::fromArray($row);
     }
 }

@@ -37,17 +37,17 @@ class CategoryController
         }
 
         $requestedPage = max(1, (int) ($_GET['page'] ?? 1));
-        $count = $this->articles->countByCategory((int) $category['id']);
+        $count = $this->articles->countByCategory($category->id);
         $pagination = $this->pagination->resolve($requestedPage, $count, self::PER_PAGE);
         $page = $pagination['page'];
         $totalPages = $pagination['totalPages'];
         $offset = $pagination['offset'];
 
-        $articles = $this->articles->findByCategory((int) $category['id'], $sort, self::PER_PAGE, $offset);
+        $articles = $this->articles->findByCategory($category->id, $sort, self::PER_PAGE, $offset);
 
-        $baseUrl = '/category/' . $category['slug'];
+        $baseUrl = '/category/' . $category->slug;
 
-        $this->smarty->assign('pageTitle', $category['name']);
+        $this->smarty->assign('pageTitle', $category->name);
         $this->smarty->assign('category', $category);
         $this->smarty->assign('articles', $articles);
         $this->smarty->assign('sort', $sort);

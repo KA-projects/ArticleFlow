@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Contracts\ArticleRepositoryInterface;
+use App\Dto\Article;
 use Smarty;
 
 class ArticleController
@@ -24,15 +25,15 @@ class ArticleController
             return;
         }
 
-        $this->articles->incrementViews((int) $article['id']);
-        $article['views'] = (int) $article['views'] + 1;
+        $this->articles->incrementViews($article->id);
+        $article = $article->withIncrementedViews();
 
         $similar = $this->articles->similar($article, 3);
 
-        $this->smarty->assign('pageTitle', $article['title']);
+        $this->smarty->assign('pageTitle', $article->title);
         $this->smarty->assign('article', $article);
         $this->smarty->assign('similar', $similar);
-        $this->smarty->assign('viewsLabel', $this->plural((int) $article['views']));
+        $this->smarty->assign('viewsLabel', $this->plural($article->views));
         $this->smarty->display('article.tpl');
     }
 

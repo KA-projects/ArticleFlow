@@ -32,7 +32,7 @@ class HomeController
         foreach ($this->categories->allWithArticles(self::PER_PAGE, $offset) as $category) {
             $sections[] = [
                 'category' => $category,
-                'articles' => $this->articles->latestByCategory((int) $category['id'], 3),
+                'articles' => $this->articles->latestByCategory($category->id, 3),
             ];
         }
 
