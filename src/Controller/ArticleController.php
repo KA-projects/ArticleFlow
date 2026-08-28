@@ -2,14 +2,14 @@
 
 namespace App\Controller;
 
-use App\Repository\ArticleRepository;
+use App\Contracts\ArticleRepositoryInterface;
 use Smarty;
 
 class ArticleController
 {
     public function __construct(
         private Smarty $smarty,
-        private ArticleRepository $articles,
+        private ArticleRepositoryInterface $articles,
     ) {
     }
 

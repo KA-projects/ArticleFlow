@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Controller\ArticleController;
 use App\Controller\CategoryController;
 use App\Controller\HomeController;
+use App\Database;
 use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
 use App\Router;
@@ -20,8 +21,10 @@ $smarty->setCompileDir('/tmp/smarty_compile');
 $smarty->setCacheDir('/tmp/smarty_cache');
 $smarty->setCaching(false);
 
-$categoryRepository = new CategoryRepository();
-$articleRepository = new ArticleRepository();
+$pdo = Database::getConnection();
+
+$categoryRepository = new CategoryRepository($pdo);
+$articleRepository = new ArticleRepository($pdo);
 $paginationService = new PaginationService();
 
 $homeController = new HomeController($smarty, $categoryRepository, $articleRepository, $paginationService);

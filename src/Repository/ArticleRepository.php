@@ -2,11 +2,15 @@
 
 namespace App\Repository;
 
-use App\Database;
+use App\Contracts\ArticleRepositoryInterface;
 use PDO;
 
-class ArticleRepository
+class ArticleRepository implements ArticleRepositoryInterface
 {
+    public function __construct(private PDO $pdo)
+    {
+    }
+
     private const SORT_WHITELIST = [
         'views' => 'a.views DESC',
         'date' => 'a.created_at DESC',
@@ -14,7 +18,7 @@ class ArticleRepository
 
     public function latestByCategory(int $categoryId, int $limit = 3): array
     {
-        $stmt = Database::getConnection()->prepare(
+        $stmt = $this->pdo->prepare(
             'SELECT a.id, a.slug, a.title, a.description, a.image, a.views, a.created_at
              FROM articles a
              INNER JOIN article_category ac ON ac.article_id = a.id
@@ -33,7 +37,7 @@ class ArticleRepository
     {
         $orderBy = self::SORT_WHITELIST[$sort] ?? self::SORT_WHITELIST['date'];
 
-        $stmt = Database::getConnection()->prepare(
+        $stmt = $this->pdo->prepare(
             "SELECT a.id, a.slug, a.title, a.description, a.image, a.views, a.created_at
              FROM articles a
              INNER JOIN article_category ac ON ac.article_id = a.id
@@ -51,7 +55,7 @@ class ArticleRepository
 
     public function countByCategory(int $categoryId): int
     {
-        $stmt = Database::getConnection()->prepare(
+        $stmt = $this->pdo->prepare(
             'SELECT COUNT(*)
              FROM articles a
              INNER JOIN article_category ac ON ac.article_id = a.id
@@ -64,7 +68,7 @@ class ArticleRepository
 
     public function findBySlug(string $slug): ?array
     {
-        $stmt = Database::getConnection()->prepare('SELECT * FROM articles WHERE slug = ?');
+        $stmt = $this->pdo->prepare('SELECT * FROM articles WHERE slug = ?');
         $stmt->execute([$slug]);
         $article = $stmt->fetch();
 
@@ -72,7 +76,7 @@ class ArticleRepository
             return null;
         }
 
-        $categoryStmt = Database::getConnection()->prepare(
+        $categoryStmt = $this->pdo->prepare(
             'SELECT c.id, c.slug, c.name
              FROM categories c
              INNER JOIN article_category ac ON ac.category_id = c.id
@@ -90,7 +94,7 @@ class ArticleRepository
 
     public function incrementViews(int $id): void
     {
-        $stmt = Database::getConnection()->prepare(
+        $stmt = $this->pdo->prepare(
             'UPDATE articles SET views = views + 1 WHERE id = ?'
         );
         $stmt->execute([$id]);
@@ -108,7 +112,7 @@ class ArticleRepository
         $params = [(int) $article['id']];
         $params = array_merge($params, array_map('intval', $categoryIds));
 
-        $stmt = Database::getConnection()->prepare(
+        $stmt = $this->pdo->prepare(
             "SELECT DISTINCT a.id, a.slug, a.title, a.description, a.image, a.views, a.created_at
              FROM articles a
              INNER JOIN article_category ac ON ac.article_id = a.id

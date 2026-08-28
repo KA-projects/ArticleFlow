@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Repository\ArticleRepository;
-use App\Repository\CategoryRepository;
+use App\Contracts\ArticleRepositoryInterface;
+use App\Contracts\CategoryRepositoryInterface;
 use App\Service\PaginationService;
 use Smarty;
 
@@ -11,8 +11,8 @@ class HomeController
 {
     public function __construct(
         private Smarty $smarty,
-        private CategoryRepository $categories,
-        private ArticleRepository $articles,
+        private CategoryRepositoryInterface $categories,
+        private ArticleRepositoryInterface $articles,
         private PaginationService $pagination,
     ) {
     }

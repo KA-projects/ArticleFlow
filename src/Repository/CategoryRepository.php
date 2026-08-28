@@ -2,14 +2,18 @@
 
 namespace App\Repository;
 
-use App\Database;
+use App\Contracts\CategoryRepositoryInterface;
 use PDO;
 
-class CategoryRepository
+class CategoryRepository implements CategoryRepositoryInterface
 {
+    public function __construct(private PDO $pdo)
+    {
+    }
+
     public function findBySlug(string $slug): ?array
     {
-        $stmt = Database::getConnection()->prepare(
+        $stmt = $this->pdo->prepare(
             'SELECT c.*, COUNT(ac.article_id) AS articles_count
              FROM categories c
              LEFT JOIN article_category ac ON ac.category_id = c.id
@@ -23,7 +27,7 @@ class CategoryRepository
 
     public function allWithArticles(int $limit, int $offset): array
     {
-        $stmt = Database::getConnection()->prepare(
+        $stmt = $this->pdo->prepare(
             'SELECT c.id, c.slug, c.name, c.description, COUNT(ac.article_id) AS articles_count
              FROM categories c
              INNER JOIN article_category ac ON ac.category_id = c.id
@@ -40,7 +44,7 @@ class CategoryRepository
 
     public function countWithArticles(): int
     {
-        $stmt = Database::getConnection()->query(
+        $stmt = $this->pdo->query(
             'SELECT COUNT(*)
              FROM (
                  SELECT c.id
@@ -55,7 +59,7 @@ class CategoryRepository
 
     public function findById(int $id): ?array
     {
-        $stmt = Database::getConnection()->prepare('SELECT * FROM categories WHERE id = ?');
+        $stmt = $this->pdo->prepare('SELECT * FROM categories WHERE id = ?');
         $stmt->execute([$id]);
 
         return $stmt->fetch() ?: null;
