@@ -19,7 +19,7 @@ seed: ## Засеять данные (идемпотентно)
 	docker compose run --rm app php bin/seed.php
 
 sass: ## Одноразовая сборка SCSS
-	docker compose run --rm --entrypoint "" sass npx sass assets/scss:public/assets/css
+	docker compose run --rm --entrypoint "" sass npx -y sass assets/scss:public/assets/css
 
 ps: ## Статус контейнеров
 	docker compose ps

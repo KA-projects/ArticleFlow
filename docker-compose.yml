@@ -26,6 +26,9 @@ services:
       DB_USER: ${MYSQL_USER:-blog}
       DB_PASS: ${MYSQL_PASSWORD:-blog}
       APP_DEBUG: ${APP_DEBUG:-false}
+      SEED_CATEGORIES: ${SEED_CATEGORIES:-50}
+      SEED_ARTICLES_MIN: ${SEED_ARTICLES_MIN:-30}
+      SEED_ARTICLES_MAX: ${SEED_ARTICLES_MAX:-90}
     depends_on:
       db:
         condition: service_healthy

@@ -25,7 +25,7 @@ make setup
 cp .env.example .env
 docker compose up -d --build
 docker compose run --rm app composer install
-docker compose run --rm --entrypoint "" sass npx sass assets/scss:public/assets/css
+docker compose run --rm --entrypoint "" sass npx -y sass assets/scss:public/assets/css
 docker compose run --rm app php bin/seed.php
 ```
 
